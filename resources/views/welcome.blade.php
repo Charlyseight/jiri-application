@@ -84,13 +84,10 @@
                     Jiri
                 </div>
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div style="width: 800px; line-height: 1.8; font-size: 18px">
+                    Jiri est une application pouvant être utilisé tant dans le milieu scolaire que professionnel.
+                    Il permet de créer des juries et de donner une pondération aux différents participants.
+                    Simple d'utilisation et élaboré pour répondre à vos attentes et besoins, Jiri est l'application qu'il vous faut !
                 </div>
             </div>
         </div>

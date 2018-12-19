@@ -3,13 +3,21 @@
 namespace Jiri\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Jiri\Impression;
 use Jiri\Jiri;
+use Jiri\Score;
 use Jiri\Student;
 
 class JiriStudentController extends Controller
 {
     public function show(Jiri $jiri, Student $student){
-        $student =  $student->load('implementsForCurrentJiriWithProject');
-        return view('students.oneStudent', ['student' => $student, 'jiri' => $jiri]);
+        $jiri = Jiri::find(1);
+        $students = $jiri->load('students');
+
+        $impressionForCurrentJiri = Impression::where([['jiri_id', 1], ['student_id', $student->id], ['user_id', auth()->id()]])->get();
+
+        $student =  $student->load('implementsForCurrentJiriWithProjectAndScore');
+
+        return view('students.oneStudent', ['student' => $student, 'jiri' => $jiri, 'impressionForCurrentJiri' => $impressionForCurrentJiri, 'students' => $students]);
     }
 }

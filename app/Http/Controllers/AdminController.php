@@ -2,23 +2,22 @@
 
 namespace Jiri\Http\Controllers;
 
-use Jiri\Implement;
-use Jiri\Jiri;
-use Jiri\People;
-use Jiri\Project;
+use Illuminate\Support\Facades\Auth;
+use Jiri\Admin;
 use Illuminate\Http\Request;
-use Jiri\Student;
+use Jiri\User;
 
-class ProjectController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
-        //
+        $user = User::find(Auth()->user()->getAuthIdentifier())->load('jiries');
+        return view('admin.homeAdmin', ['user' => $user]);
     }
 
     /**
@@ -28,7 +27,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.createJiri');
     }
 
     /**
@@ -45,29 +44,21 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student, Project $project)
+    public function show(Admin $admin)
     {
-        $implements = $student->load('implementsForCurrentJiriWithProject');
-
-        $jiri = Jiri::find(1);
-        $students = $jiri->load('students');
-
-        $currentStudent = $student->load(['implementsForCurrentJiriWithProject' => function ($q) use ($project){
-            $q->where('project_id', $project->id);
-        }]);
-        return view('project.cotationOneProject', ['currentStudent' => $currentStudent, 'students' => $students, 'implements' => $implements]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $projects)
+    public function edit(Admin $admin)
     {
         //
     }
@@ -76,10 +67,10 @@ class ProjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $projects)
+    public function update(Request $request, Admin $admin)
     {
         //
     }
@@ -87,10 +78,10 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $projects)
+    public function destroy(Admin $admin)
     {
         //
     }

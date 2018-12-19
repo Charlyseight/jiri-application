@@ -2,14 +2,12 @@
 
 namespace Jiri\Http\Controllers;
 
-use Jiri\Implement;
-use Jiri\Jiri;
-use Jiri\People;
-use Jiri\Project;
+use Illuminate\Support\Facades\Redirect;
+use Jiri\Http\Requests\StoreImpression;
+use Jiri\Impression;
 use Illuminate\Http\Request;
-use Jiri\Student;
 
-class ProjectController extends Controller
+class ImpressionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,37 +35,32 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreImpression $request)
     {
-        //
+        session()->flash('message', 'La note d‘appréciation à bien été ajoutée');
+        $validatedData = $request->all();
+        Impression::create($validatedData);
+        return \Redirect::back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Impression  $impression
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student, Project $project)
+    public function show(Impression $impression)
     {
-        $implements = $student->load('implementsForCurrentJiriWithProject');
-
-        $jiri = Jiri::find(1);
-        $students = $jiri->load('students');
-
-        $currentStudent = $student->load(['implementsForCurrentJiriWithProject' => function ($q) use ($project){
-            $q->where('project_id', $project->id);
-        }]);
-        return view('project.cotationOneProject', ['currentStudent' => $currentStudent, 'students' => $students, 'implements' => $implements]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Impression  $impression
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $projects)
+    public function edit(Impression $impression)
     {
         //
     }
@@ -76,21 +69,23 @@ class ProjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Impression  $impression
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $projects)
+    public function update(Request $request, Impression $impression)
     {
-        //
+        session()->flash('message', 'La note d‘appréciation à bien été modifié');
+        $impression->update($request->all());
+        return \Redirect::back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Jiri\Project  $projects
+     * @param  \Jiri\Impression  $impression
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $projects)
+    public function destroy(Impression $impression)
     {
         //
     }

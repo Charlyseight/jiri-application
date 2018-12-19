@@ -22,6 +22,7 @@ class Jiri extends Model
         return $this->morphedByMany(Student::class, 'person');
     }
 
+
     /*public function getCreatedDateAttribute(){
         $d = Carbon::parse($this->created_at)->locale(app()->getLocale());
         return $d->isoFormat('LLLL');

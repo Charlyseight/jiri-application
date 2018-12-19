@@ -5,9 +5,9 @@
     <h2>Cotations</h2>
     <select name="student" id="student">
         @foreach($students->students as $oneStudent)
-                <option value="{{$oneStudent->name}}">
-                        {{$oneStudent->name}}
-                </option>
+            <option value="{{$oneStudent->name}}">
+                {{$oneStudent->name}}
+            </option>
         @endforeach
     </select>
     <br>
@@ -25,19 +25,18 @@
         <p>
             Note obligatoire
         </p>
-        <form action="/score" method="post">
+        <form action="/score/{{ $score->id }}" method="post">
+            @method('patch')
             @csrf
-            <input type="hidden" name="user_id" value="{{ auth()->user()->getAuthIdentifier()}}" >
-            <input type="hidden" name="implement_id" value="{{ $currentStudent->implementsForCurrentJiriWithProject->first()->id }}" >
             <label for="score">
                 Points pour le projet
             </label>
-            <input type="number" name="score" id="score">
+            <input type="number" name="score" id="score" value="{{ $score->score }}">
             <span>sur 20</span>
             <br>
             <label for="comment">Commentaires</label>
             <br>
-            <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+            <textarea name="comment" id="comment" cols="30" rows="10">{{ $score->comment }}</textarea>
             <br>
             <input type="submit" value="Valider">
         </form>
@@ -46,3 +45,4 @@
 
 
 @endsection
+

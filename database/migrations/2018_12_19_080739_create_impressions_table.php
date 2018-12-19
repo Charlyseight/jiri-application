@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectsTable extends Migration
+class CreateImpressionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('impressions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('tags');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('student_id');
+            $table->unsignedInteger('jiri_id');
+            $table->unsignedInteger('impression_score');
+            $table->text('impression_comment')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('impressions');
     }
 }

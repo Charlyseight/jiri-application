@@ -27,5 +27,10 @@ class PeopleTableSeeder extends Seeder
             'person_id' => 2,
             'person_type' => \Jiri\User::class
         ]);
+        \Jiri\People::create([
+            'jiri_id' => 1,
+            'person_id' => 2,
+            'person_type' => \Jiri\Student::class
+        ]);
     }
 }

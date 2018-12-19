@@ -2,6 +2,8 @@
 
 namespace Jiri\Http\Controllers;
 
+use Illuminate\Support\Facades\Redirect;
+use Jiri\Http\Requests\StoreScore;
 use Jiri\Implement;
 use Jiri\Jiri;
 use Jiri\Project;
@@ -37,13 +39,13 @@ class ScoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Project $project, Student $student)
+    public function store(StoreScore $request)
     {
-        $student = $student->load(['implementsForCurrentJiriWithProject', function ($q){
-             $q->where('project_id', $project);
-         }]);
-         return view('students.allStudent', ['project' => $project, 'student' => $student]);
-
+        $validatedData = $request->all();
+        Score::create($validatedData);
+        $implements = Implement::find($request->get('implement_id'));
+        $student = $implements->student;
+        return \Redirect::action('JiriStudentController@show', $student->id);
     }
 
     /**
@@ -65,7 +67,20 @@ class ScoreController extends Controller
      */
     public function edit(Score $score)
     {
-        //
+
+        $implement = Implement::find($score->implement_id);
+
+        $project = Project::find($implement->project_id);
+
+        $jiri = Jiri::find(1);
+        $students = $jiri->load('students');
+
+        $implements = Student::find($implement->student_id)->load('implementsForCurrentJiriWithProject');
+
+        $currentStudent = Student::find($implement->student_id)->load(['implementsForCurrentJiriWithProject'=> function ($q) use($project){
+            $q->where('project_id', $project->id);
+    }]);
+        return view('project.editCotationOneProject', ['score' => $score, 'currentStudent' => $currentStudent, 'implements' => $implements, 'students' => $students]);
     }
 
     /**
@@ -77,7 +92,11 @@ class ScoreController extends Controller
      */
     public function update(Request $request, Score $score)
     {
-        //
+        $score->update($request->all());
+        $implements = Implement::find($score->implement_id);
+        $student = $implements->student;
+        return \Redirect::action('JiriStudentController@show', $student->id);
+
     }
 
     /**

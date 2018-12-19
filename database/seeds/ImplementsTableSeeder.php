@@ -21,7 +21,7 @@ class ImplementsTableSeeder extends Seeder
         \Jiri\Implement::create([
             'student_id' => 1,
             'project_id'=> 2,
-            'jiri_id' => 2,
+            'jiri_id' => 1,
             'result' => 12,
         ]);
 
