@@ -14,7 +14,7 @@ class JiriStudentController extends Controller
         $jiri = Jiri::find(1);
         $students = $jiri->load('students');
 
-        $impressionForCurrentJiri = Impression::where([['jiri_id', 1], ['student_id', $student->id], ['user_id', auth()->id()]])->get();
+        $impressionForCurrentJiri = Impression::where([['jiri_id', session('jiri_id')], ['student_id', $student->id], ['user_id', auth()->id()]])->get();
 
         $student =  $student->load('implementsForCurrentJiriWithProjectAndScore');
 

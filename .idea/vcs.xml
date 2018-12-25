@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Jiri-application" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/pwa" vcs="Git" />
   </component>
 </project>

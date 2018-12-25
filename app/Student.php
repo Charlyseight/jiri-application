@@ -18,13 +18,13 @@ class Student extends Model
     public function implementsForCurrentJiriWithProject(){
         return $this->hasMany(Implement::class)
             ->with('project')
-            ->where('jiri_id', 1);
+            ->where('jiri_id', session('jiri_id'));
     }
 
     public function implementsForCurrentJiriWithProjectAndScore(){
         return $this->hasMany(Implement::class)
             ->with(['project', 'scoreForOneProject'])
-            ->where('jiri_id', 1);
+            ->where('jiri_id', session('jiri_id'));
     }
 
 }

@@ -43,9 +43,6 @@
         <form action="/impression/{{ $impressionForCurrentJiri->first()->id }}" method="post">
             @method('patch')
             @csrf
-            <input type="hidden" name="jiri_id" value="1" >
-            <input type="hidden" name="user_id" value="{{auth()->id()}}">
-            <input type="hidden" name="student_id" value="{{$student->id}}">
             <label for="impression_score">
                 Appréciation générale
             </label>
@@ -64,7 +61,7 @@
         <p>Note non obligatoire</p>
         <form action="/impression" method="post">
             @csrf
-            <input type="hidden" name="jiri_id" value="1" >
+            <input type="hidden" name="jiri_id" value="{{session('jiri_id')}}" >
             <input type="hidden" name="user_id" value="{{auth()->id()}}">
             <input type="hidden" name="student_id" value="{{$student->id}}">
             <label for="impression_score">

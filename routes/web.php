@@ -43,5 +43,7 @@ Route::get('/student/{student}/project/{project}', 'ProjectController@show')->mi
 
 Route::get('/admin/jiri/create', 'AdminController@create')->middleware('auth');
 
+Route::get('/token/{token}', 'TokenController@checkToken');
+
 
 
