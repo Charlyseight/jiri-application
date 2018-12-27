@@ -18,7 +18,7 @@ class JiriesTableSeeder extends Seeder
 
         \Jiri\Jiri::create([
             'name' => 'Jury septembre 2016',
-            'user_id'=> 2
+            'user_id'=> 1
         ]);
 
         \Jiri\Jiri::create([

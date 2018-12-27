@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section ('content')
-    <h1>{{$currentJiri->name}} {{--{{ $currentJiri->createdDate }}--}}</h1>
+    <h1>{{$currentJiri->name}} crée le {{ $currentJiri->createdDate }}</h1>
 <ul>
     @foreach($currentJiri->students as $student)
     <li>

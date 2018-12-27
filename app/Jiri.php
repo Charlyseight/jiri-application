@@ -23,8 +23,8 @@ class Jiri extends Model
     }
 
 
-    /*public function getCreatedDateAttribute(){
+    public function getCreatedDateAttribute(){
         $d = Carbon::parse($this->created_at)->locale(app()->getLocale());
         return $d->isoFormat('LLLL');
-    }*/
+    }
 }

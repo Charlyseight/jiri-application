@@ -14,6 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/admin', function () {
+    return view('admin');
+})->middleware('auth');
 
 
 
@@ -35,13 +38,9 @@ Route::post('/score', 'ScoreController@store')->middleware('auth');
 
 Route::patch('/score/{score}', 'ScoreController@update')->middleware('auth');
 
-Route::get('/admin/dashboard', 'DashboardController@index')->middleware('auth');
-
-Route::resource('admin', 'AdminController')->middleware('auth');
+Route::get('authenticated-user', 'AuthenticatedUserController@fetch');
 
 Route::get('/student/{student}/project/{project}', 'ProjectController@show')->middleware('auth');
-
-Route::get('/admin/jiri/create', 'AdminController@create')->middleware('auth');
 
 Route::get('/token/{token}', 'TokenController@checkToken');
 

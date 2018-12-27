@@ -7,7 +7,11 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+/*window.Vue = require('vue');*/
+
+import Vue from 'vue';
+import store from './store';
+import router from './router';
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,7 +24,8 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('jiri-list', require('./components/jiriList.vue'));
+Vue.component('jiri-admin', require('./components/jiriAdmin.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,5 +34,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store,
+    router,
 });
