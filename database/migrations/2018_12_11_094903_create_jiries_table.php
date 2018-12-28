@@ -17,6 +17,7 @@ class CreateJiriesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('user_id');
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

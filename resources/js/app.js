@@ -24,8 +24,11 @@ import router from './router';
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
-Vue.component('jiri-list', require('./components/jiriList.vue'));
-Vue.component('jiri-admin', require('./components/jiriAdmin.vue'));
+Vue.component('jiri-list', require('./components/JiriList.vue'));
+Vue.component('jiri-admin', require('./components/JiriAdmin.vue'));
+Vue.component('navigation', require('./components/Navigation.vue'));
+Vue.component('jiri-add-form', require('./components/JiriAddForm.vue'));
+Vue.component('jiri-dashboard', require('./components/JiriDashboard.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
