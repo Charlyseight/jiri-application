@@ -35,7 +35,14 @@ class JiriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = $request['infoName'];
+        $date = $request['infoDate'];
+        $hour = $request['infoHour'];
+        $schedule_on = $date . ' ' . $hour;
+        /*$oldproject = $request['projectOld'];
+        $newproject = $request['projectNew'];*/
+        Jiri::create(['name' => $name, 'user_id'=> auth()->id(), 'schedule_on' => $schedule_on /*'oldproject' => $oldproject*/ ]);
+
     }
 
     /**
