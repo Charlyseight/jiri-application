@@ -30,6 +30,8 @@ Route::get('/student/{student}', 'JiriStudentController@show')->middleware('auth
 
 Route::resource('jiri', 'JiriController')->middleware('auth');
 
+Route::resource('groupe', 'GroupeController')->middleware('auth');
+
 Route::get('/score/{score}/edit', 'ScoreController@edit')->middleware('auth');
 
 Route::resource('/impression', 'ImpressionController')->middleware('auth');

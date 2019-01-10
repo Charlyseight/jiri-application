@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
+    protected $fillable = ['name', 'email'];
     public function implements() {
         return $this->hasMany(Implement::class);
     }

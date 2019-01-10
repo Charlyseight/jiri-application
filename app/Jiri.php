@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Jiri extends Model
 {
     protected $table = 'jiries';
-    protected $fillable = ['name', 'user_id', 'schedule_on'];
+    protected $fillable = ['name', 'user_id', 'schedule_on', ];
     public function judges()
     {
         return $this->morphedByMany(User::class, 'person');

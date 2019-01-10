@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Implement extends Model
 {
+    protected $fillable = ['student_id', 'project_id', 'jiri_id'];
     public function project(){
         return $this->belongsTo(Project::class);
     }

@@ -29,6 +29,7 @@ Vue.component('jiri-admin', require('./components/JiriAdmin.vue'));
 Vue.component('navigation', require('./components/Navigation.vue'));
 Vue.component('jiri-add-form', require('./components/JiriAddForm.vue'));
 Vue.component('jiri-dashboard', require('./components/JiriDashboard.vue'));
+Vue.component('jiri-groupe', require('./components/JiriGroupe.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

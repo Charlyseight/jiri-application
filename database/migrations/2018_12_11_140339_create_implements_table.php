@@ -18,7 +18,7 @@ class CreateImplementsTable extends Migration
             $table->unsignedInteger('student_id');
             $table->unsignedInteger('project_id');
             $table->unsignedInteger('jiri_id');
-            $table->unsignedInteger('result');
+            $table->unsignedInteger('result')->nullable();
             $table->timestamps();
         });
     }

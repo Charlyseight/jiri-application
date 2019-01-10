@@ -2,8 +2,15 @@
 
 namespace Jiri\Http\Controllers;
 
+use function GuzzleHttp\Psr7\str;
+use Illuminate\Support\Facades\Hash;
+use Jiri\Groupe_Student;
+use Jiri\Implement;
 use Jiri\Jiri;
 use Illuminate\Http\Request;
+use Jiri\People;
+use Jiri\Project;
+use Jiri\User;
 
 class JiriController extends Controller
 {
@@ -35,13 +42,80 @@ class JiriController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request['infoName'];
-        $date = $request['infoDate'];
-        $hour = $request['infoHour'];
+        $name = $request['name'];
+        $date = $request['date'];
+        $hour = $request['hour'];
         $schedule_on = $date . ' ' . $hour;
-        /*$oldproject = $request['projectOld'];
-        $newproject = $request['projectNew'];*/
-        Jiri::create(['name' => $name, 'user_id'=> auth()->id(), 'schedule_on' => $schedule_on /*'oldproject' => $oldproject*/ ]);
+        $allProjects = $request['allProjects'];
+        $allJudges = $request['allJudges'];
+        $oldproject = $request['oldproject'];
+        $addjudge = $request['addjudge'];
+        $oldJudgeMail = $request['oldJudgeMail'];
+        $allOldJudge = $request['allOldJudge'];
+        $selectedProjects = $request['selectedProjects'];
+
+        $jiri = Jiri::create(['name' => $name, 'user_id'=> auth()->id(), 'schedule_on' => $schedule_on /*'oldproject' => $oldproject,*/ /*'addjudge' => $addjudge,*/ /*'oldJudgeMail' => $oldJudgeMail*/ ]);
+
+
+        if(!empty($allProjects)){
+            foreach ($allProjects as $project){
+                Project::create([
+                    'name' => $project['name'],
+                    'tags' => $project['tags'],
+                ]);
+            }
+        }
+        if(!empty($allJudges)){
+            foreach($allJudges as $judge){
+                $user = User::create([
+                    'name' => $judge['name'],
+                    'email' => $judge['email'],
+                    'password' => Hash::make('secret'),
+                    'api_token' => str_random(60)
+                ]);
+                People::create([
+                    'jiri_id'=> $jiri->id,
+                    'person_id'=> $user->id,
+                    'person_type' => 'jiri\User'
+                ]);
+
+            }
+        }
+        if(!empty($allOldJudge)){
+            foreach ($allOldJudge as $addOldJudge){
+                $user = User::where('email', $addOldJudge['email'])->first();
+                People::create([
+                    'jiri_id'=> $jiri->id,
+                    'person_id'=> $user->id,
+                    'person_type' => 'jiri\User',
+                ]);
+            }
+        }
+        $groupeStudent = Groupe_Student::where('group_id', $request['groupeId'])->get();
+        if(!empty($groupeStudent)){
+            foreach ($groupeStudent as $studId ) {
+                foreach ($allProjects as $project) {
+                $project = Project::where('name', $project['name'])->first();
+                    Implement::create([
+                        'student_id' => $studId->id,
+                        'project_id' => $project->id,
+                        'jiri_id' => $jiri->id,
+                    ]);
+                }
+            }
+        }
+        if(!empty($groupeStudent)){
+            foreach ($groupeStudent as $studId ) {
+                foreach ($selectedProjects as $oneOldPro) {
+                    $project = Project::where('name', $oneOldPro['name'])->first();
+                    Implement::create([
+                        'student_id'=> $studId->id,
+                        'project_id' => $project->id,
+                        'jiri_id' => $jiri->id,
+                    ]);
+                }
+            }
+        }
 
     }
 
