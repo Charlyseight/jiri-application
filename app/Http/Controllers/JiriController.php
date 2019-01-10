@@ -94,6 +94,11 @@ class JiriController extends Controller
         $groupeStudent = Groupe_Student::where('group_id', $request['groupeId'])->get();
         if(!empty($groupeStudent)){
             foreach ($groupeStudent as $studId ) {
+                People::create([
+                    'jiri_id' => $jiri->id,
+                    'person_id' => $studId->id,
+                    'person_type' => 'jiri\Student',
+                ]);
                 foreach ($allProjects as $project) {
                 $project = Project::where('name', $project['name'])->first();
                     Implement::create([

@@ -4,6 +4,7 @@ namespace Jiri\Http\Controllers;
 
 use Jiri\Implement;
 use Illuminate\Http\Request;
+use Jiri\Jiri;
 
 class ImplementController extends Controller
 {
@@ -78,8 +79,14 @@ class ImplementController extends Controller
      * @param  \Jiri\Implement  $implement
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Implement $implement)
+    public function destroy(Implement $implement, Request $request)
     {
-        //
+        $jiri = Jiri::where('user_id', auth()->id())->orderBy('created_at', 'desc')->first();
+        foreach($request['projectsInImplement'] as $oneProjectInChart){
+            $implementsForDelete = Implement::where('jiri_id', $jiri->id)
+                ->where('student_id', $oneProjectInChart['student'])
+                ->where('project_id', $oneProjectInChart['project'])->first();
+            $implementsForDelete->delete();
+        }
     }
 }

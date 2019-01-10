@@ -18,7 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('jiri', 'Api\AdminJiriController')->middleware('auth:api');
-Route::get('/getcurrentjiri', 'Api\AdminJiriController@lastcreatedjiri')->middleware('auth:api');
+Route::get('/getcurrentjiri', 'Api\AdminJiriController@lastCreatedJiri')->middleware('auth:api');
+Route::get('/getprojectfromcurrentjiri', 'Api\AdminJiriController@projectFromCurrentJiri')->middleware('auth:api');
 Route::resource('projects', 'Api\AdminProjectsController')->middleware('auth:api');
 Route::resource('dashboard', 'Api\AdminDashboardController')->middleware('auth:api');
 Route::resource('users', 'Api\AdminUsersController')->middleware('auth:api');

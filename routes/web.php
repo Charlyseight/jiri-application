@@ -38,6 +38,8 @@ Route::resource('/impression', 'ImpressionController')->middleware('auth');
 
 Route::post('/score', 'ScoreController@store')->middleware('auth');
 
+Route::post('/deleteImplementations', 'ImplementController@destroy')->middleware('auth');
+
 Route::patch('/score/{score}', 'ScoreController@update')->middleware('auth');
 
 Route::get('authenticated-user', 'AuthenticatedUserController@fetch');
