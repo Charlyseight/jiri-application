@@ -1,18 +1,12 @@
 @extends('layouts.app')
 
 @section ('content')
+    <a href="/student/{{$currentStudent->id}}" class="btn btn-dark">Retour</a>
     <h1>{{ $currentStudent->name }}</h1>
     <h2>Cotations</h2>
-    <select name="student" id="student">
-        @foreach($students->students as $oneStudent)
-                <option value="{{$oneStudent->name}}">
-                        {{$oneStudent->name}}
-                </option>
-        @endforeach
-    </select>
     <br>
     @foreach($implements->implementsForCurrentJiriWithProject as $implement)
-        <a href="/student/{{ $currentStudent->id }}/project/{{ $implement->project->id }}">
+        <a href="/student/{{ $currentStudent->id }}/project/{{ $implement->project->id }}" class="btn btn-primary m-2">
             {{ $implement->project->name }}
         </a>
     @endforeach

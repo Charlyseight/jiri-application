@@ -50,15 +50,12 @@ class ProjectController extends Controller
      */
     public function show(Student $student, Project $project)
     {
-        $implements = $student->load('implementsForCurrentJiriWithProject');
-
-        $jiri = Jiri::find(1);
-        $students = $jiri->load('students');
+        $implements = $student->load('implementsForCurrentJiriWithProject')->first();
 
         $currentStudent = $student->load(['implementsForCurrentJiriWithProject' => function ($q) use ($project){
             $q->where('project_id', $project->id);
         }]);
-        return view('project.cotationOneProject', ['currentStudent' => $currentStudent, 'students' => $students, 'implements' => $implements]);
+        return view('project.cotationOneProject', ['currentStudent' => $currentStudent, 'implements' => $implements]);
     }
 
     /**

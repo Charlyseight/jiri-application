@@ -4,10 +4,13 @@ namespace Jiri\Http\Controllers;
 
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Jiri\Groupe_Student;
 use Jiri\Implement;
 use Jiri\Jiri;
 use Illuminate\Http\Request;
+use Jiri\Mail\JiriStarted;
+use Jiri\Mail\JiriStoped;
 use Jiri\People;
 use Jiri\Project;
 use Jiri\User;
@@ -48,13 +51,10 @@ class JiriController extends Controller
         $schedule_on = $date . ' ' . $hour;
         $allProjects = $request['allProjects'];
         $allJudges = $request['allJudges'];
-        $oldproject = $request['oldproject'];
-        $addjudge = $request['addjudge'];
-        $oldJudgeMail = $request['oldJudgeMail'];
         $allOldJudge = $request['allOldJudge'];
         $selectedProjects = $request['selectedProjects'];
 
-        $jiri = Jiri::create(['name' => $name, 'user_id'=> auth()->id(), 'schedule_on' => $schedule_on /*'oldproject' => $oldproject,*/ /*'addjudge' => $addjudge,*/ /*'oldJudgeMail' => $oldJudgeMail*/ ]);
+        $jiri = Jiri::create(['name' => $name, 'user_id'=> auth()->id(), 'schedule_on' => $schedule_on]);
 
 
         if(!empty($allProjects)){
@@ -166,8 +166,42 @@ class JiriController extends Controller
      * @param  \Jiri\Jiri  $jiries
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Jiri $jiries)
+    public function destroy(Jiri $jiries, Request $request)
     {
-        //
+        $id = $request['id'];
+        $jiri = Jiri::where('id', $id);
+        $jiri->delete();
+        $implementations = Implement::where('jiri_id', $id)->get();
+        foreach($implementations as $i){
+            $i->delete();
+        }
+        $people = People::where('jiri_id',$id)->get();
+        foreach($people as $p){
+            $p->delete();
+        }
+    }
+
+    public function startJiri(Request $request){
+        $id = $request['id'];
+        $jiri = Jiri::findOrfail($id)->load('judges');
+        $jiri->is_active = true;
+        $jiri->save();
+        foreach ($jiri->judges as $judge){
+            $judge->token = time(). '$'. $judge->id. '$'. $jiri->id;
+            $judge->save();
+            Mail::to($judge->email)->send(new JiriStarted($judge,$jiri));
+        }
+    }
+
+    public function stopJiri(Request $request){
+        $id = $request['id'];
+        $jiri = Jiri::findOrfail($id)->load('judges');
+        $jiri->is_active = false;
+        $jiri->save();
+        foreach ($jiri->judges as $judge){
+            $judge->token = null;
+            $judge->save();
+            Mail::to($judge->email)->send(new JiriStoped($judge,$jiri));
+        }
     }
 }

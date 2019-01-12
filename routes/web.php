@@ -40,6 +40,12 @@ Route::post('/score', 'ScoreController@store')->middleware('auth');
 
 Route::post('/deleteImplementations', 'ImplementController@destroy')->middleware('auth');
 
+Route::post('/deleteJury', 'JiriController@destroy')->middleware('auth');
+
+Route::post('/startJury', 'JiriController@startJiri')->middleware('auth');
+
+Route::post('/stopJury', 'JiriController@stopJiri')->middleware('auth');
+
 Route::patch('/score/{score}', 'ScoreController@update')->middleware('auth');
 
 Route::get('authenticated-user', 'AuthenticatedUserController@fetch');

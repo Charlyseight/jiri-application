@@ -11,7 +11,7 @@ use Jiri\Student;
 class JiriStudentController extends Controller
 {
     public function show(Jiri $jiri, Student $student){
-        $jiri = Jiri::find(1);
+        $jiri = Jiri::find(session('jiri_id'));
         $students = $jiri->load('students');
 
         $impressionForCurrentJiri = Impression::where([['jiri_id', session('jiri_id')], ['student_id', $student->id], ['user_id', auth()->id()]])->get();

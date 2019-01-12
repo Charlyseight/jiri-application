@@ -4,6 +4,8 @@
     @if(session('message'))
         <p>{{ session('message') }}</p>
     @endif
+    <a href="/jiri/{{session('jiri_id')}}" class="btn btn-dark m-2">Retour</a>
+    <br>
     <select name="student" id="student">
         @foreach($students->students as $oneStudent)
             <option value="{{$oneStudent->name}}">

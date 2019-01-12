@@ -8,7 +8,7 @@
             {{ $student->name }}
         <br>
         @foreach($student->implementsForCurrentJiriWithProject as $implement)
-            <div>{{ $implement->project->name }} </div>
+            <p>{{ $implement->project->name }} </p>
         @endforeach
 
         <a href="/student/{{$student->id}}">Voir ses projects</a>
