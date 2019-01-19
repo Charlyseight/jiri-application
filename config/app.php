@@ -172,7 +172,7 @@ return [
          */
         Jiri\Providers\AppServiceProvider::class,
         Jiri\Providers\AuthServiceProvider::class,
-        // Jiri\Providers\BroadcastServiceProvider::class,
+        Jiri\Providers\BroadcastServiceProvider::class,
         Jiri\Providers\EventServiceProvider::class,
         Jiri\Providers\RouteServiceProvider::class,
 

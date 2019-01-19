@@ -3,6 +3,8 @@
 namespace Jiri;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class Student extends Model
 {
@@ -25,6 +27,12 @@ class Student extends Model
     public function implementsForCurrentJiriWithProjectAndScore(){
         return $this->hasMany(Implement::class)
             ->with(['project', 'scoreForOneProject'])
+            ->where('jiri_id', session('jiri_id'));
+    }
+
+    public function implementsForCurrentJiriWithProjectAndScores(){
+        return $this->hasMany(Implement::class)
+            ->with(['project', 'scores'])
             ->where('jiri_id', session('jiri_id'));
     }
 

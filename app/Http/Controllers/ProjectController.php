@@ -91,4 +91,14 @@ class ProjectController extends Controller
     {
         //
     }
+
+    public function getProjectsEditForm(Request $request){
+        $implements = Implement::where('jiri_id', $request['id'])->distinct()->get(['project_id']);
+        $projectInChart = [];
+        foreach($implements as $implement){
+            $project = Project::where('id', $implement->project_id)->first();
+            $projectInChart [] = $project;
+        }
+        return $projectInChart;
+    }
 }

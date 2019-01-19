@@ -30,6 +30,8 @@ Route::get('/student/{student}', 'JiriStudentController@show')->middleware('auth
 
 Route::resource('jiri', 'JiriController')->middleware('auth');
 
+Route::post('addInJiri', 'JiriController@addInJiri')->middleware('auth');
+
 Route::resource('groupe', 'GroupeController')->middleware('auth');
 
 Route::get('/score/{score}/edit', 'ScoreController@edit')->middleware('auth');
@@ -44,7 +46,19 @@ Route::post('/deleteJury', 'JiriController@destroy')->middleware('auth');
 
 Route::post('/startJury', 'JiriController@startJiri')->middleware('auth');
 
+Route::get('/dashboard', 'DashboardController@index')->middleware('auth');
+
+Route::get('/getJudges', 'DashboardController@getJudgesForDashboard')->middleware('auth');
+
+Route::get('/getJiri', 'DashboardController@getJiriForDashboard')->middleware('auth');
+
 Route::post('/stopJury', 'JiriController@stopJiri')->middleware('auth');
+
+Route::post('/modifyForm', 'JiriController@modifyForm')->middleware('auth');
+
+Route::post('/getUsersForm', 'PeopleController@getUsersEditForm')->middleware('auth');
+
+Route::post('/getProjectsForm', 'ProjectController@getProjectsEditForm')->middleware('auth');
 
 Route::patch('/score/{score}', 'ScoreController@update')->middleware('auth');
 

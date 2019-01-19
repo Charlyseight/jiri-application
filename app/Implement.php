@@ -11,7 +11,7 @@ class Implement extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function scores(Score $score){
+    public function scores(){
         return $this->hasMany(Score::class);
     }
 

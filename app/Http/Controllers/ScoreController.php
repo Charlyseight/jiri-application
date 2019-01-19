@@ -3,6 +3,7 @@
 namespace Jiri\Http\Controllers;
 
 use Illuminate\Support\Facades\Redirect;
+use Jiri\Events\ScoreCreated;
 use Jiri\Http\Requests\StoreScore;
 use Jiri\Implement;
 use Jiri\Jiri;
@@ -42,9 +43,19 @@ class ScoreController extends Controller
     public function store(StoreScore $request)
     {
         $validatedData = $request->all();
-        Score::create($validatedData);
-        $implements = Implement::find($request->get('implement_id'));
-        $student = $implements->student;
+        $score = Score::create($validatedData);
+        broadcast(new ScoreCreated($score));
+        $implement = Implement::find($request->get('implement_id'));
+        $student = $implement->student;
+        $scores = Score::where('implement_id', $request['implement_id'])->get();
+        $result = null;
+        $divided = null;
+        foreach($scores as $score){
+            $result += $score->score;
+            $divided += 1;
+        }
+        $implement->result = $result/$divided;
+        $implement->save();
         return \Redirect::action('JiriStudentController@show', $student->id);
     }
 
@@ -72,7 +83,7 @@ class ScoreController extends Controller
 
         $project = Project::find($implement->project_id);
 
-        $jiri = Jiri::find(1);
+        $jiri = Jiri::find(session('jiri_id'));
         $students = $jiri->load('students');
 
         $implements = Student::find($implement->student_id)->load('implementsForCurrentJiriWithProject');
@@ -93,8 +104,17 @@ class ScoreController extends Controller
     public function update(Request $request, Score $score)
     {
         $score->update($request->all());
-        $implements = Implement::find($score->implement_id);
-        $student = $implements->student;
+        $implement = Implement::find($score->implement_id);
+        $student = $implement->student;
+        $scores = Score::where('implement_id', $score->implement_id)->get();
+        $result = null;
+        $divided = null;
+        foreach($scores as $score){
+            $result += $score->score;
+            $divided += 1;
+        }
+        $implement->result = $result/$divided;
+        $implement->save();
         return \Redirect::action('JiriStudentController@show', $student->id);
 
     }

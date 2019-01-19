@@ -13,6 +13,8 @@ use Jiri\Mail\JiriStarted;
 use Jiri\Mail\JiriStoped;
 use Jiri\People;
 use Jiri\Project;
+use Jiri\Score;
+use Jiri\Student;
 use Jiri\User;
 
 class JiriController extends Controller
@@ -121,7 +123,35 @@ class JiriController extends Controller
                 }
             }
         }
+    }
 
+    public function addInJiri(Request $request){
+        $allProjects = $request['allProjects'];
+        $allJudges = $request['allJudges'];
+
+        if(!empty($allProjects)){
+            foreach ($allProjects as $project){
+                Project::create([
+                    'name' => $project['name'],
+                    'tags' => $project['tags'],
+                ]);
+            }
+        }
+        if(!empty($allJudges)){
+            foreach($allJudges as $judge){
+                $user = User::create([
+                    'name' => $judge['name'],
+                    'email' => $judge['email'],
+                    'password' => Hash::make('secret'),
+                    'api_token' => str_random(60)
+                ]);
+                People::create([
+                    'jiri_id'=> $request['jiri_id'],
+                    'person_id'=> $user->id,
+                    'person_type' => 'jiri\User'
+                ]);
+            }
+        }
     }
 
     /**
@@ -184,6 +214,7 @@ class JiriController extends Controller
     public function startJiri(Request $request){
         $id = $request['id'];
         $jiri = Jiri::findOrfail($id)->load('judges');
+        session(['jiri_id' => $jiri->id]);
         $jiri->is_active = true;
         $jiri->save();
         foreach ($jiri->judges as $judge){
@@ -191,6 +222,8 @@ class JiriController extends Controller
             $judge->save();
             Mail::to($judge->email)->send(new JiriStarted($judge,$jiri));
         }
+
+
     }
 
     public function stopJiri(Request $request){
@@ -204,4 +237,19 @@ class JiriController extends Controller
             Mail::to($judge->email)->send(new JiriStoped($judge,$jiri));
         }
     }
+
+    public function modifyForm(Request $request){
+        $jiri = Jiri::where('id', $request['id'])->first();
+        return $jiri;
+    }
+
+    /*public function getImplements(Student $student){
+        $students = Student::All();
+        $studentChart = [];
+        foreach($students as $student){
+            $oneStudent = $student->load('implementsForCurrentJiriWithProjectAndScores');
+            array_push($studentChart, $oneStudent);
+        }
+        return $studentChart;
+    }*/
 }

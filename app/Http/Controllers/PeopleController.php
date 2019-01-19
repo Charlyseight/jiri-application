@@ -2,8 +2,10 @@
 
 namespace Jiri\Http\Controllers;
 
+use Jiri\Jiri;
 use Jiri\People;
 use Illuminate\Http\Request;
+use Jiri\User;
 
 class PeopleController extends Controller
 {
@@ -81,5 +83,15 @@ class PeopleController extends Controller
     public function destroy(People $people)
     {
         //
+    }
+
+    public function getUsersEditForm(Request $request){
+        $people = People::where('jiri_id',$request['id'])->where('person_type', 'jiri\User')->get();
+        $userInChart = [];
+        foreach ($people as $person){
+            $user= User::where('id', $person->person_id)->first();
+            $userInChart [] = $user;
+        }
+        return $userInChart;
     }
 }
