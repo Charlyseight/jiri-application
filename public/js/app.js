@@ -26603,7 +26603,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(22);
-module.exports = __webpack_require__(95);
+module.exports = __webpack_require__(100);
 
 
 /***/ }),
@@ -26643,8 +26643,8 @@ __webpack_require__(23);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('jiri-list', __webpack_require__(17));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('jiri-admin', __webpack_require__(85));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navigation', __webpack_require__(90));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('jiri-admin', __webpack_require__(90));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('navigation', __webpack_require__(95));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('jiri-add-form', __webpack_require__(18));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('jiri-dashboard', __webpack_require__(19));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('jiri-groupe', __webpack_require__(20));
@@ -59393,7 +59393,9 @@ var state = {
     jiri: null,
     modifyForm: null,
     judgesForm: null,
-    projectsForm: null
+    projectsForm: null,
+    editedProjects: null,
+    test: []
 };
 
 var getters = {};
@@ -59443,6 +59445,9 @@ var mutations = {
     },
     setProjectsEditForm: function setProjectsEditForm(state, projectsForm) {
         state.projectsForm = projectsForm;
+    },
+    setEditedProjectsFromJiri: function setEditedProjectsFromJiri(state, editedProjects) {
+        state.editedProjects = editedProjects;
     }
 };
 
@@ -59574,8 +59579,9 @@ var actions = {
             }).catch(function (error) {
                 return console.error(error.response.data.message);
             });
-            Echo.join('judgeScore').listen(".score.created", function (e) {
-                _this.state.dashboard.implements_for_current_jiri_with_project_and_scores.scores.push(e.score);
+            Echo.channel('judgeScore').listen(".score.created", function (e) {
+                _this.state.test.push(e);
+                /*this.state.dashboard.implements_for_current_jiri_with_project_and_scores.scores.push(e.score)*/
             });
         });
     },
@@ -59638,6 +59644,19 @@ var actions = {
         return new Promise(function (resolve, reject) {
             window.axios.post('/getProjectsForm', { id: data }).then(function (response) {
                 commit('setProjectsEditForm', response.data);
+                resolve();
+            }).catch(function (error) {
+                return console.error(error.response.data.message);
+            });
+        });
+    },
+    setEditedProjectsFromJiri: function setEditedProjectsFromJiri(_ref15, data) {
+        var commit = _ref15.commit,
+            state = _ref15.state;
+
+        return new Promise(function (resolve, reject) {
+            window.axios.post('/endForm', { id: data }).then(function (response) {
+                commit('setEditedProjectsFromJiri', response.data);
                 resolve();
             }).catch(function (error) {
                 return console.error(error.response.data.message);
@@ -62295,6 +62314,8 @@ if (inBrowser && window.Vue) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_jiriEditForm___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_jiriEditForm__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_JiriDashEditForm__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_JiriDashEditForm___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_JiriDashEditForm__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_JiriEndFormEdit__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_JiriEndFormEdit___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_JiriEndFormEdit__);
 
 
 
@@ -62302,7 +62323,8 @@ if (inBrowser && window.Vue) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/', name: 'jirilist', component: __WEBPACK_IMPORTED_MODULE_0__components_JiriList___default.a }, { path: '/addjiri', name: 'addjiri', component: __WEBPACK_IMPORTED_MODULE_1__components_JiriAddForm___default.a }, { path: '/dashboard', name: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_2__components_JiriDashboard___default.a }, { path: '/groupe', name: 'addgroup', component: __WEBPACK_IMPORTED_MODULE_3__components_JiriGroupe___default.a }, { path: '/editjiri', name: 'editjiri', component: __WEBPACK_IMPORTED_MODULE_4__components_jiriEditForm___default.a }, { path: '/modify/:id', name: 'modify', component: __WEBPACK_IMPORTED_MODULE_5__components_JiriDashEditForm___default.a }]);
+
+/* harmony default export */ __webpack_exports__["a"] = ([{ path: '/', name: 'jirilist', component: __WEBPACK_IMPORTED_MODULE_0__components_JiriList___default.a }, { path: '/addjiri', name: 'addjiri', component: __WEBPACK_IMPORTED_MODULE_1__components_JiriAddForm___default.a }, { path: '/dashboard', name: 'dashboard', component: __WEBPACK_IMPORTED_MODULE_2__components_JiriDashboard___default.a }, { path: '/groupe', name: 'addgroup', component: __WEBPACK_IMPORTED_MODULE_3__components_JiriGroupe___default.a }, { path: '/editjiri', name: 'editjiri', component: __WEBPACK_IMPORTED_MODULE_4__components_jiriEditForm___default.a }, { path: '/modify/:id', name: 'modify', component: __WEBPACK_IMPORTED_MODULE_5__components_JiriDashEditForm___default.a }, { path: '/endForm/:id', name: 'endForm', component: __WEBPACK_IMPORTED_MODULE_6__components_JiriEndFormEdit___default.a }]);
 
 /***/ }),
 /* 53 */
@@ -63653,7 +63675,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -63700,6 +63722,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63710,7 +63733,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         };
     },
 
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['dashboard', 'judges', 'jiri'])),
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['dashboard', 'judges', 'jiri', 'test'])),
     methods: {
         getJudge: function getJudge(id) {
             var user = this.judges.find(function (element) {
@@ -63743,6 +63766,7 @@ var render = function() {
   return _c(
     "div",
     [
+      _vm._v("\n    " + _vm._s(_vm.test) + "\n    "),
       _c("h1", [
         _vm._v("\n        Jiri en cours : " + _vm._s(_vm.jiri.name) + "\n    ")
       ]),
@@ -64351,7 +64375,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -64393,8 +64417,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
 
 
 
@@ -64402,7 +64424,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     name: "JiriEditForm",
     data: function data() {
         return {
-            projectsInImplement: []
+            projectsInImplement: [],
+            componentReady: false
         };
     },
 
@@ -64431,8 +64454,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['studentsInLastJiri', 'projectsInLastJiri'])),
     mounted: function mounted() {
-        this.$store.dispatch('setStudentsInLastJiri');
-        this.$store.dispatch('setProjectsInLastJiri');
+        var _this = this;
+
+        this.$store.dispatch('setStudentsInLastJiri').then(function () {
+            _this.$store.dispatch('setProjectsInLastJiri').then(function () {
+                _this.componentReady = true;
+            });
+        });
     }
 });
 
@@ -64614,7 +64642,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -64626,6 +64654,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router__ = __webpack_require__(6);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -64783,6 +64812,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -64800,7 +64835,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             searchJudge: '',
             searchJudgeEmail: null,
             allOldJudge: [],
-            componentReady: false
+            componentReady: false,
+            deleteJudges: [],
+            deleteProjects: []
         };
     },
 
@@ -64825,9 +64862,30 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     }),
     methods: {
         sendForm: function sendForm() {
-            window.axios.post('/addInJiri', { /*name: this.infoName, date: this.infoDate, hour: this.infoHour*/allProjects: this.allProjects, tagsForProject: this.tagsForProject, allJudges: this.allJudges /*, groupeId : document.querySelector('.group').value*/, jiri_id: this.$route.params.id }).then(function (response) {
-                console.log(response.data);
-                /*router.push({name:'editjiri'})*/
+            var _this2 = this;
+
+            window.axios.post('/addInJiri', { allProjects: this.allProjects, tagsForProject: this.tagsForProject, allJudges: this.allJudges, groupeId: document.querySelector('.group').value, jiri_id: this.$route.params.id, selectedProjects: this.selectedProjects, allOldJudge: this.allOldJudge, projectsForm: this.projectsForm }).then(function (response) {
+                console.log(response.data.message);
+                _this2.deleteInDb();
+            }).catch(function (error) {
+                console.log(error.response.data.message);
+            });
+        },
+        deleteInDb: function deleteInDb() {
+            var _this3 = this;
+
+            window.axios.post('/deleteInJiri', { users: this.deleteJudges, jiri_id: this.$route.params.id, projects: this.deleteProjects }).then(function (response) {
+                _this3.addBasicsInDb();
+            }).catch(function (error) {
+                console.log(error.response.data.message);
+            });
+        },
+        addBasicsInDb: function addBasicsInDb() {
+            var infoName = document.querySelector('#name').value;
+            var infoDate = document.querySelector('#date').value;
+            var infoHour = document.querySelector('#hour').value;
+            window.axios.post('/addBasicInfoInJiri', { name: infoName, date: infoDate, hour: infoHour, jiri_id: this.$route.params.id }).then(function (response) {
+                __WEBPACK_IMPORTED_MODULE_1__router__["a" /* default */].push({ name: 'endForm' });
             }).catch(function (error) {
                 console.log(error.response.data.message);
             });
@@ -64836,7 +64894,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             this.searchJudge = judge.name;
             this.searchJudgeEmail = judge.email;
         },
-        deleteItem: function deleteItem(index, type) {
+        deleteItem: function deleteItem(index, type, oldJudge) {
             if (type === 'project') {
                 this.selectedProjects.splice(index, 1);
             } else if (type === 'judge') {
@@ -64877,12 +64935,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
             this.selectedProjects.push({ id: id, name: name });
         },
-        deleteInDb: function deleteInDb(index, type) {
-            if (type === "editProject") {
-                this.$store.state.projectsForm.splice(index, 1);
-            } else if (type === 'editJudge') {
-                this.$store.state.judgesForm.splice(index, 1);
-            }
+        deleteInDbProject: function deleteInDbProject(index, project) {
+            this.$store.state.projectsForm.splice(index, 1);
+            this.deleteProjects.push(project);
+        },
+        deleteInDbJudge: function deleteInDbJudge(index, judge) {
+            this.$store.state.judgesForm.splice(index, 1);
+            this.deleteJudges.push(judge);
         },
         oldJudgeInChart: function oldJudgeInChart() {
             if (this.searchJudgeEmail === '' || this.searchJudge === '') {
@@ -64898,15 +64957,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     },
     mounted: function mounted() {
-        var _this2 = this;
+        var _this4 = this;
 
         this.$store.dispatch('setModifyJiriForm', this.$route.params.id).then(function () {
-            _this2.$store.dispatch('setUsersEditForm', _this2.$route.params.id).then(function () {
-                _this2.$store.dispatch('setProjectsEditForm', _this2.$route.params.id).then(function () {
-                    _this2.$store.dispatch('setAllGroups').then(function () {
-                        _this2.$store.dispatch('setAllProjects').then(function () {
-                            _this2.$store.dispatch('setAllUsers').then(function () {
-                                _this2.componentReady = true;
+            _this4.$store.dispatch('setUsersEditForm', _this4.$route.params.id).then(function () {
+                _this4.$store.dispatch('setProjectsEditForm', _this4.$route.params.id).then(function () {
+                    _this4.$store.dispatch('setAllGroups').then(function () {
+                        _this4.$store.dispatch('setAllProjects').then(function () {
+                            _this4.$store.dispatch('setAllUsers').then(function () {
+                                _this4.componentReady = true;
                             });
                         });
                     });
@@ -64945,7 +65004,7 @@ var render = function() {
           _c("label", { attrs: { for: "date" } }, [_vm._v("Date")]),
           _vm._v(" "),
           _c("input", {
-            attrs: { type: "text", id: "date", name: "date" },
+            attrs: { type: "date", id: "date", name: "date" },
             domProps: { value: _vm.scheduleDate }
           })
         ]),
@@ -64964,39 +65023,41 @@ var render = function() {
         _c("div", [
           _c("h2", [_vm._v("Modifier les projets du Jiri")]),
           _vm._v(" "),
-          _c(
-            "ul",
-            _vm._l(_vm.projectsForm, function(project, index) {
-              return _c(
-                "li",
-                { key: project.id, attrs: { project: project } },
-                [
-                  _vm._v(
-                    "\n                " +
-                      _vm._s(project.name) +
-                      "\n                "
-                  ),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      on: {
-                        click: function($event) {
-                          _vm.deleteInDb(index, "editProject")
+          _c("div", [
+            _c(
+              "ul",
+              _vm._l(_vm.projectsForm, function(project, index) {
+                return _c(
+                  "li",
+                  { key: project.id, attrs: { project: project } },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(project.name) +
+                        "\n                    "
+                    ),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            _vm.deleteInDbProject(index, project)
+                          }
                         }
-                      }
-                    },
-                    [
-                      _vm._v(
-                        "\n                    Supprimer\n                "
-                      )
-                    ]
-                  )
-                ]
-              )
-            }),
-            0
-          ),
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Supprimer\n                    "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              }),
+              0
+            )
+          ]),
           _vm._v(" "),
           _c("div", [
             _c("h3", [_vm._v("Séléctionner un ancien projet")]),
@@ -65215,31 +65276,37 @@ var render = function() {
         _c("div", [
           _c("h2", [_vm._v("Modifier les membres au jury")]),
           _vm._v(" "),
-          _c(
-            "ul",
-            _vm._l(_vm.judgesForm, function(judge, index) {
-              return _c("li", { key: judge.id, attrs: { judge: judge } }, [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(judge.name) +
-                    "\n                "
-                ),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    on: {
-                      click: function($event) {
-                        _vm.deleteInDb(index, "editJudge")
+          _c("div", [
+            _c(
+              "ul",
+              _vm._l(_vm.judgesForm, function(judge, index) {
+                return _c("li", { key: judge.id, attrs: { judge: judge } }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(judge.name) +
+                      "\n                    "
+                  ),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteInDbJudge(index, judge)
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("\n                    Supprimer\n                ")]
-                )
-              ])
-            }),
-            0
-          ),
+                    },
+                    [
+                      _vm._v(
+                        "\n                        Supprimer\n                    "
+                      )
+                    ]
+                  )
+                ])
+              }),
+              0
+            )
+          ]),
           _vm._v(" "),
           _c("div", [
             _c("h3", [_vm._v("Séléctionner les membres du jury")]),
@@ -65509,7 +65576,8 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("button", { on: { click: _vm.sendForm } }, [_vm._v("Suivant")])
+        _c("button", { on: { click: _vm.sendForm } }, [_vm._v("Suivant")]),
+        _vm._v("\n    " + _vm._s(_vm.projectsForm) + "\n")
       ])
     : _c("div", [_c("p", [_vm._v("\n        Please wait...\n    ")])])
 }
@@ -65537,6 +65605,274 @@ var normalizeComponent = __webpack_require__(3)
 var __vue_script__ = __webpack_require__(88)
 /* template */
 var __vue_template__ = __webpack_require__(89)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-4fda0c38"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/JiriEndFormEdit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4fda0c38", Component.options)
+  } else {
+    hotAPI.reload("data-v-4fda0c38", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(87);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("1b0e07cc", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4fda0c38\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./JiriEndFormEdit.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4fda0c38\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./JiriEndFormEdit.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router__ = __webpack_require__(6);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "JiriEndFormEdit",
+    data: function data() {
+        return {
+            projectsInImplement: [],
+            componentReady: false
+        };
+    },
+
+    methods: {
+        sendForm: function sendForm() {
+            window.axios.post('/editedDeleteImplementations', { projectsInImplement: this.projectsInImplement, jiri_id: this.$route.params.id }).then(function (response) {
+                __WEBPACK_IMPORTED_MODULE_1__router__["a" /* default */].push({ name: 'jirilist' });
+            }).catch(function (error) {
+                console.log(error.response.data.message);
+            });
+        },
+        choiceProjects: function choiceProjects(unSelectedProject) {
+            var checkInArray = this.projectsInImplement.filter(function (projectInImplement) {
+                return projectInImplement.student === unSelectedProject.student && projectInImplement.project === unSelectedProject.project;
+            });
+
+            if (checkInArray.length === 0) {
+                this.projectsInImplement.push(unSelectedProject);
+            } else if (checkInArray.length > 0) {
+                var foundIndex = this.projectsInImplement.findIndex(function (projectInImplement) {
+                    return projectInImplement.key === unSelectedProject.key;
+                });
+                this.projectsInImplement.splice(foundIndex, 1);
+            }
+        }
+    },
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['editedProjects'])),
+    mounted: function mounted() {
+        var _this = this;
+
+        this.$store.dispatch('setEditedProjectsFromJiri', this.$route.params.id).then(function () {
+            _this.componentReady = true;
+        });
+    }
+});
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.componentReady === false
+    ? _c("div", [_vm._v("\n    Please wait...\n")])
+    : _c(
+        "div",
+        [
+          _c("h1", [
+            _vm._v("\n        Les projects en fonction des participants\n    ")
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              "\n        Vous pouvez ici personnalisé les projets présentés en fonction du participant.\n        Si tous les participants présentent les mêmes projets que séléctionné dans l'étape précédente, veuillez ignorer cette étape.\n    "
+            )
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.editedProjects, function(student) {
+            return _c(
+              "div",
+              [
+                _vm._v("\n        " + _vm._s(student.name) + "\n        "),
+                _vm._l(
+                  student.implements_for_current_jiri_with_project,
+                  function(implement) {
+                    return _c(
+                      "div",
+                      { key: implement.id, attrs: { implement: implement } },
+                      [
+                        _c("input", {
+                          attrs: {
+                            type: "checkbox",
+                            name: student.id,
+                            id: student.id + "&" + implement.project.name,
+                            checked: ""
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.choiceProjects({
+                                student: student.id,
+                                project: implement.project.id,
+                                key: student.id + "&" + implement.project.name
+                              })
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "label",
+                          {
+                            attrs: {
+                              for: student.id + "&" + implement.project.name
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(implement.project.name) +
+                                "\n            "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  }
+                )
+              ],
+              2
+            )
+          }),
+          _vm._v(" "),
+          _c("button", { on: { click: _vm.sendForm } }, [_vm._v("Terminer")])
+        ],
+        2
+      )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4fda0c38", module.exports)
+  }
+}
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(91)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(93)
+/* template */
+var __vue_template__ = __webpack_require__(94)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -65575,13 +65911,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 86 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(87);
+var content = __webpack_require__(92);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -65601,7 +65937,7 @@ if(false) {
 }
 
 /***/ }),
-/* 87 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -65615,7 +65951,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 
 /***/ }),
-/* 88 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -65633,7 +65969,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 89 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -65653,19 +65989,19 @@ if (false) {
 }
 
 /***/ }),
-/* 90 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(91)
+  __webpack_require__(96)
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
-var __vue_script__ = __webpack_require__(93)
+var __vue_script__ = __webpack_require__(98)
 /* template */
-var __vue_template__ = __webpack_require__(94)
+var __vue_template__ = __webpack_require__(99)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -65704,13 +66040,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 91 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(92);
+var content = __webpack_require__(97);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -65730,7 +66066,7 @@ if(false) {
 }
 
 /***/ }),
-/* 92 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -65738,17 +66074,25 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 93 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -65775,7 +66119,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 94 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -65824,7 +66168,7 @@ if (false) {
 }
 
 /***/ }),
-/* 95 */
+/* 100 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

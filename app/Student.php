@@ -36,4 +36,5 @@ class Student extends Model
             ->where('jiri_id', session('jiri_id'));
     }
 
+
 }

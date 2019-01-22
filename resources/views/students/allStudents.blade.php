@@ -11,10 +11,8 @@
                 @foreach($student->implementsForCurrentJiriWithProject as $implement)
                     <p>{{ $implement->project->name }} </p>
                 @endforeach
-
                 <a href="/student/{{$student->id}}">Voir ses projects</a>
                 <hr>
-
             </li>
             @endforeach
         </ul>

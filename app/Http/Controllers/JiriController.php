@@ -19,32 +19,6 @@ use Jiri\User;
 
 class JiriController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $name = $request['name'];
@@ -124,78 +98,17 @@ class JiriController extends Controller
             }
         }
     }
-
-    public function addInJiri(Request $request){
-        $allProjects = $request['allProjects'];
-        $allJudges = $request['allJudges'];
-
-        if(!empty($allProjects)){
-            foreach ($allProjects as $project){
-                Project::create([
-                    'name' => $project['name'],
-                    'tags' => $project['tags'],
-                ]);
-            }
-        }
-        if(!empty($allJudges)){
-            foreach($allJudges as $judge){
-                $user = User::create([
-                    'name' => $judge['name'],
-                    'email' => $judge['email'],
-                    'password' => Hash::make('secret'),
-                    'api_token' => str_random(60)
-                ]);
-                People::create([
-                    'jiri_id'=> $request['jiri_id'],
-                    'person_id'=> $user->id,
-                    'person_type' => 'jiri\User'
-                ]);
-            }
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Jiri\Jiri  $jiries
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Jiri $jiri)
+    public function show(Jiri $jiri, Student $student)
     {
-        $currentJiri = $jiri->load('students');
+       $currentJiri = $jiri->load('students');
         return view('students.allStudents', ['currentJiri' => $currentJiri]);
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \Jiri\Jiri  $jiries
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Jiri $jiries)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Jiri\Jiri  $jiries
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Jiri $jiries)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \Jiri\Jiri  $jiries
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Jiri $jiries, Request $request)
     {
         $id = $request['id'];
@@ -236,11 +149,6 @@ class JiriController extends Controller
             $judge->save();
             Mail::to($judge->email)->send(new JiriStoped($judge,$jiri));
         }
-    }
-
-    public function modifyForm(Request $request){
-        $jiri = Jiri::where('id', $request['id'])->first();
-        return $jiri;
     }
 
     /*public function getImplements(Student $student){

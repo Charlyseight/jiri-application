@@ -89,4 +89,13 @@ class ImplementController extends Controller
             $implementsForDelete->delete();
         }
     }
+
+    public function deleteImplementations(Implement $implement, Request $request){
+        foreach($request['projectsInImplement'] as $oneProjectInChart){
+            $implementsForDelete = Implement::where('jiri_id', $request['jiri_id'])
+                ->where('student_id', $oneProjectInChart['student'])
+                ->where('project_id', $oneProjectInChart['project'])->first();
+            $implementsForDelete->delete();
+        }
+    }
 }

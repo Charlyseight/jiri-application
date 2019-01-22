@@ -30,7 +30,12 @@ Route::get('/student/{student}', 'JiriStudentController@show')->middleware('auth
 
 Route::resource('jiri', 'JiriController')->middleware('auth');
 
-Route::post('addInJiri', 'JiriController@addInJiri')->middleware('auth');
+Route::post('addInJiri', 'JiriEditFormController@addInJiri')->middleware('auth');
+
+Route::post('addBasicInfoInJiri', 'JiriEditFormController@addBasicInfoInJiri')->middleware('auth');
+
+Route::post('deleteInJiri', 'JiriEditFormController@deleteInJiri')->middleware('auth');
+
 
 Route::resource('groupe', 'GroupeController')->middleware('auth');
 
@@ -42,6 +47,8 @@ Route::post('/score', 'ScoreController@store')->middleware('auth');
 
 Route::post('/deleteImplementations', 'ImplementController@destroy')->middleware('auth');
 
+Route::post('/editedDeleteImplementations', 'ImplementController@deleteImplementations')->middleware('auth');
+
 Route::post('/deleteJury', 'JiriController@destroy')->middleware('auth');
 
 Route::post('/startJury', 'JiriController@startJiri')->middleware('auth');
@@ -52,9 +59,13 @@ Route::get('/getJudges', 'DashboardController@getJudgesForDashboard')->middlewar
 
 Route::get('/getJiri', 'DashboardController@getJiriForDashboard')->middleware('auth');
 
+Route::post('/endForm', 'JiriEditFormController@editedProjectsFromJiri')->middleware('auth');
+
 Route::post('/stopJury', 'JiriController@stopJiri')->middleware('auth');
 
-Route::post('/modifyForm', 'JiriController@modifyForm')->middleware('auth');
+Route::post('/editProjectStudent', 'jiriController@editProjectStudent')->middleware('auth');
+
+Route::post('/modifyForm', 'JiriEditFormController@modifyForm')->middleware('auth');
 
 Route::post('/getUsersForm', 'PeopleController@getUsersEditForm')->middleware('auth');
 
